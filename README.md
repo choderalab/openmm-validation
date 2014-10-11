@@ -46,3 +46,72 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testConstrainedMasslessParticles.** Ensure that attempting to constrain a massless (fixed) particle throws an exception, while making both particles massless (fixed) does not throw an exception despite the presence of a constraint.
 * **testRandomSeed.** Ensure that setting the random seed to the same value produces identical particle positions following integration from the same initial positions and momenta, while changing the random seed produces a different set of particle positions.
 
+
+### Integration tests
+
+#### Statistical mechanics tests
+Statistical mechanics tests ensure that the statistical mechanical properties of simple systems are reproduced as expeted.
+
+* CheckEnsemble from Michael Shirts: [code](https://github.com/shirtsgroup/checkensemble) [DOI](http://pubs.acs.org/doi/abs/10.1021/ct300688p)
+
+##### Standard battery of test systems
+We have implemented a battery of test systems that span a variety of complexities:
+https://github.com/choderalab/repex/blob/master/repex/testsystems.py
+
+This includes:
+* `HarmonicOscillator`: A 3D harmonic oscillator.
+* `PowerOscillator`: A single particle confined to an x^d well.
+* `Diatom`: A free diatomic molecule in a harmonic well, with or without bond constraint.
+* `DiatomicFluid`: A periodic box of diatomic particles, with or without bond constraint.
+* `DipolarFluid`: A diatomic fluid with charges to create dipolar particles.
+* `ConstraintCoupledHarmonicOscillator`: A pair of particles in 3D harmonic oscillator wells, coupled by a constraint
+* `HarmonicOscillatorArray`: A 1D array of noninteracting particles in 3D harmonic oscillator wells.
+* `SodiumChlorideCrystal`: FCC crystal of sodium chloride
+* `LennardJonesCluster`: A non-periodic rectilinear grid of Lennard-Jones particles in a harmonic restraining potential.
+* `LennardJonesFluid`: periodic rectilinear grid of Lennard-Jones particles.
+* `CustomLennardJonesFluidMixture`: A periodic rectilinear grid of Lennard-Jones particled, but implemented via CustomBondForce and NonbondedForce.
+* `WCAFluid`: Weeks-Chandler-Andersen system
+* `IdealGas`: An 'ideal gas' of noninteracting particles in a periodic box.
+* `WaterBox`: A water box test system (multiple water models possible, with variants including discharged versions, flexible and constrained waters, etc.)
+* `AlanineDipeptideVacuum`: Alanine dipeptide in vacuum.
+* `AlanineDipeptideImplicit`: Alanine dipeptide in implicit solvent
+* `AlanineDipeptideExplicit`: Alanine dipeptide in explicit solvent.
+* `LysozymeImplicit`: T4 lysozyme L99A with p-xylene ligand in OBC GBSA
+* `MethanolBox`: A periodic box of methanol
+* `MolecularIdealGas`: Molecular ideal gas (methanol box).
+* `CustomGBForceSystem`: A system of particles with a CustomGBForce.
+* `AMOEBAIonBox`: A single Ca2 ion in a water box.
+* Lots of alchemically-modified systems
+
+#### Stability tests
+Stability tests ensure that simulations of typical systems of interest are stable and robust.
+
+##### Old validation suite tests
+Tests are run by running the `runAllTests.sh` script, which runs the systems in `systems/` through four different kinds of tests in different subsets:
+* **Consistency between platforms**: `TestForces.py`
+* **Energy-force consistency**: `TestEnergyForces.py`
+* **Energy conservation**: `TestVerletEnergyConservation.py`
+* **Thermostability** (really just a thermostat test): `TestLangevinThermostability.py`
+
+##### Test systems from old OpenMM validation suite
+* 1PLX
+* bpti
+* ala10
+* dnaDickerson
+* ubiquitin
+* spectrin
+* sv582
+* sv583
+* 6TNA
+* CheY
+* lambda repressor, d14a
+* 1yrf
+* 1ubq
+* 1not
+
+
+
+#### Numerical tests
+Numerical tests ensure that the various components of OpenMM are numerically well-behaved, and agree between `Platform`s.
+
+### Comparison tests
