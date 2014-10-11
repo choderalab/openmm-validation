@@ -72,7 +72,12 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 #### CustomCompoundBondForce
 * **testBond.** For a four-particle system, test 10 random geometries to ensure a `CustomCompoundBondForce` combination of bond-angle-torsion terms matches that expected from a standard combination of bond, angle, and torsion forces.
 * **testPositionDependence.** For a two-particle system interacting via a harmonic bond and position-dependent field per particle, ensure energy and force (rel tol `1e-5`) are correct.
- 
+
+#### CustomExternalForce
+* **testForce.** For a harmonic osccilator in the y-axis, test that a three-particle system obtains the correct energies and forces (rel tol `1e-5`) for two specific geometries and two sets of parameters.
+* **testManuParameters.** For a single particle, test a three-dimensional harmonic oscillator with separate x, y, and z-axis parameters obtains the correct energy and forces (rel tol `1e-5`).
+
+#### CustomGBForce
 
 ### Integration tests
 
