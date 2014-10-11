@@ -26,6 +26,12 @@ Tests for OpenMM are broken down into several categories:
 Some tests compute the expectation of a quantity from a simulation of finite length.
 * What criteria should we use to judge if the test has passed or failed?
 
+### Numerical tests
+* Is it appropriate to make comparisons using relative errors in forces and energies, or absolute errors?
+* If absolute errors, what should the criteria be for energies and forces?
+  * For energies, `kT` is a meaningful scale. For example, we may want errors less than `0.01*kT`, to ensure equilibrium probabilities are not corrupted substantially.
+  * What would the criteria be for forces?
+
 ## Detailed test description
 
 ### Unit tests
@@ -52,9 +58,21 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 #### CMMotionRemover
 * **testMotionRemoval.** Ensure that the center of mass of a system of 8 charged LJ particles (also containing a harmonic bond) is preserved when `CMMotionRemover` is in use. Both `LangevinIntegrator` and `VerletIntegrator` are tested.
 
-#### Checkpoints
-* `testCheckpoint.** Ensure that trajectories generated after saving a checkpoint and after resuming from the checkpoint generate identical positions, velocities, and parameters.
-* `testSetState.** Perform the same test as `testCheckpoint` but utilize the `Context::set{State|Parameter|PeriodicBoxVectors|Positions}` interface instead.
+#### Checkpoint
+* **testCheckpoint.** Ensure that trajectories generated after saving a checkpoint and after resuming from the checkpoint generate identical positions, velocities, and parameters.
+* **testSetState.** Perform the same test as `testCheckpoint` but utilize the `Context::set{State|Parameter|PeriodicBoxVectors|Positions}` interface instead.
+
+#### CustomAngleForce
+* **testAngles.** Compare a four-particle system with two angles to `HarmonicAngleForce` over 10 random geometries to ensure energies and forces (rel tol `1e-5`) match. Change parameters `theta0` and `K` and test again.
+
+#### CustomBondForce
+* **testBonds.** For a single geometry of three atoms and two bonds, test forces and energies are correct (rel tol `1e-5`) for a harmonic bond. Change `r0` and `K` and test again.
+* **testManyParameters.** For a two particle system connected by a bond whose energy is linear in `r`, check that the energy and forces (rel tol `1e-5`) is correct when 9 user-specified parameters are summed to give the multiplicative constant.
+
+#### CustomCompoundBondForce
+* **testBond.** For a four-particle system, test 10 random geometries to ensure a `CustomCompoundBondForce` combination of bond-angle-torsion terms matches that expected from a standard combination of bond, angle, and torsion forces.
+* **testPositionDependence.** For a two-particle system interacting via a harmonic bond and position-dependent field per particle, ensure energy and force (rel tol `1e-5`) are correct.
+ 
 
 ### Integration tests
 
