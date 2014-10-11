@@ -46,6 +46,15 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testConstrainedMasslessParticles.** Ensure that attempting to constrain a massless (fixed) particle throws an exception, while making both particles massless (fixed) does not throw an exception despite the presence of a constraint.
 * **testRandomSeed.** Ensure that setting the random seed to the same value produces identical particle positions following integration from the same initial positions and momenta, while changing the random seed produces a different set of particle positions.
 
+#### CMAPTorsionForce
+* **testCMAPTorsions.** Compare a 5-particle system with two torsions to ensure that a traditional `PeriodicTorsionForce` and the corresponding `CMAPTorsionForce` give the same energies (rel tol 0.001) and forces (rel tol 0.05) for 50 random configurations.
+
+#### CMMotionRemover
+* **testMotionRemoval.** Ensure that the center of mass of a system of 8 charged LJ particles (also containing a harmonic bond) is preserved when `CMMotionRemover` is in use. Both `LangevinIntegrator` and `VerletIntegrator` are tested.
+
+#### Checkpoints
+* `testCheckpoint.** Ensure that trajectories generated after saving a checkpoint and after resuming from the checkpoint generate identical positions, velocities, and parameters.
+* `testSetState.** Perform the same test as `testCheckpoint` but utilize the `Context::set{State|Parameter|PeriodicBoxVectors|Positions}` interface instead.
 
 ### Integration tests
 
