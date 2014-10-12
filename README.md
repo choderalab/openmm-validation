@@ -78,6 +78,12 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testManuParameters.** For a single particle, test a three-dimensional harmonic oscillator with separate x, y, and z-axis parameters obtains the correct energy and forces (rel tol `1e-5`).
 
 #### CustomGBForce
+* **testOBC.** Compare a `CustomGBForce` implementation of the OBC GBSA scheme (with ACE surface area term) with the `GBSAOBCForce` implementation for a system of 70 diatomic molecules, testing two parameter sets and a single random configuration of particles.
+* **testMembrane.** Construct a `CustomGBForce` for an implicit membrane model and check whether a small step (0.1A) in the direction of the gradient causes the energy to change by the expected amount (rel tol `1e-3`).
+* **testTabulatedFunction.** Test that a tabulated function with 2.5A spacing is reproduced by `CustomGBForce` in both forces (rel tol 0.1) and potential (rel tol 0.02).
+* **testMultipleChainRules.** Test that successive application of the chain rule works correctly for a simple chain of linear functions, comparing energies (rel tol 0.02) and forces (rel tol `1e-4`).
+* **testPositionDependence.** For a pair of particles, test that a `CustomGBForce` that depends both on interatomic distance and (x,y) position in space achieves correct energy (rel tol 0.02) and force (rel tol `1e-4`) for 5 random configurations. A small step in the direction of the gradient is also tested for expected energy change (rel tol `1e-3`).
+* **testExclusions.** A system of two particles is tested for correct energy (rel tol `1e-4`) and forces (rel tol `1e-4`) when cycling through implemented particle exclusion options (`ParticlePair`, `ParticlePairNoExclusions`) for computed values and energy terms. A small step (0.01A) in the direction of the gradient is also tested for expected energy change (abs tol `1e-3` kJ/mol).
 
 ### Integration tests
 
