@@ -100,12 +100,12 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testWithThermostat.** Test an 8-particle alternately charged LJ system with a leapfrog Verlet integrator and Andersen thermostat to make sure the average instantaneous kinetic energy over 150 ps is correct for the thermostat temperature (rel tol 0.1).
 * **testMonteCarlo.** Test a simple Metropolis Monte Carlo scheme using Gaussian proposal with a system of two harmonically bonded particles to ensure the binned distribution of distances (bin size 0.4, 100 bins) is approximately satisfied (rel tol 0.01).
 * **testSum.** Test that specifying a kinetic energy expression for a leapfrog Verlet integrator gives the expected kinetic energy for a 200-particle system (rel tol 1e-5).
-* **testParameter.**
-* **testRandomDistributions.**
-* **testPerDofVariables.**
-* **testForceGroups.**
-* **testRespa.**
-* **testMergedRandoms.**
+* **testParameter.** Test that a `CustomIntegrator` can both use and modify a context parameter correctly.
+* **testRandomDistributions.** Test that a uniform variate gives flat bin histograms (20 bins) to within 4 standard errors, and that a gaussian distribution gives the expected mean, var, skew, and kurtosis to within 3 standard errors.
+* **testPerDofVariables.** Test that, for a 200-particle system, we can retrieve per-dof variables correctly, testing both an initialized-to-zero variable and a per-dof variable that reports the particle position.
+* **testForceGroups.** Test that a two-particle system with a `HarmonicBondForce` and `NonbondedForce` partitioned into different force groups produce the correct force and energy partitioning for a single configuration.
+* **testRespa.** Test that a RESPA integrator for an 8-particle system containing a harmonically bonded chain of LJ particles of alternating charge where the reciprocal `NonbondedForce` interactions and harmonic bond interactions are updated in the inner loop produces decent energy conservation (rel tol 0.05) over 2000 steps of 2 fs outer / 1 fs inner timestep. 
+* **testMergedRandoms.** Generate two uniform and two gaussian random variates each for per-dof and global variables, as test if uniform variates are in the interval [0,1) and gaussian variates are in the interval [-10,10) for 10 sets of integrator steps for 10 particles. **NOTE: This does not test if the distributions are correct.**
 
 ### Integration tests
 
