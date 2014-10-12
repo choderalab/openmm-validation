@@ -85,6 +85,13 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testPositionDependence.** For a pair of particles, test that a `CustomGBForce` that depends both on interatomic distance and (x,y) position in space achieves correct energy (rel tol 0.02) and force (rel tol `1e-4`) for 5 random configurations. A small step in the direction of the gradient is also tested for expected energy change (rel tol `1e-3`).
 * **testExclusions.** A system of two particles is tested for correct energy (rel tol `1e-4`) and forces (rel tol `1e-4`) when cycling through implemented particle exclusion options (`ParticlePair`, `ParticlePairNoExclusions`) for computed values and energy terms. A small step (0.01A) in the direction of the gradient is also tested for expected energy change (abs tol `1e-3` kJ/mol).
 
+#### CustomHbondForce
+* **testHbond.** For a system of 5 particles, implement a `CustomHbondForce` that depends on a distance, angle, and torsion, and check that the energy (rel tol 1e-5) and force (rel tol 1e-5) are reproduced for 10 random configurations.
+* **testExclusions.** For a system of 3 particles, test a simple distance-dependent `CustomHbondForce` containing a single exclusion to ensure that the energy (rel tol 1e-5) and force (rel tol 1e-5) are reproduced for a single conformation.
+* **testCutoff.** For a system of 3 particles, test a simple distance-dependent `CustomHbondForce` with a distance cutoff to ensure that the energy (rel tol 1e-5) and force (rel tol 1e-5) are reproduced for a single conformation.
+* **testCustomFunctions.** Test that a linearly interpolated function of distance is correctly reproduced for a single geometry of three particles, testing energy (rel tol 1e-5) and force (rel tol 1e-5).
+
+
 ### Integration tests
 
 #### Statistical mechanics tests
