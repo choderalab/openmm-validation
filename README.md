@@ -31,6 +31,7 @@ Some tests compute the expectation of a quantity from a simulation of finite len
 * If absolute errors, what should the criteria be for energies and forces?
   * For energies, `kT` is a meaningful scale. For example, we may want errors less than `0.01*kT`, to ensure equilibrium probabilities are not corrupted substantially.
   * What would the criteria be for forces?
+* How should finite-difference tests of energies and forces be conducted?
 
 ## Detailed test description
 
@@ -91,6 +92,20 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testCutoff.** For a system of 3 particles, test a simple distance-dependent `CustomHbondForce` with a distance cutoff to ensure that the energy (rel tol 1e-5) and force (rel tol 1e-5) are reproduced for a single conformation.
 * **testCustomFunctions.** Test that a linearly interpolated function of distance is correctly reproduced for a single geometry of three particles, testing energy (rel tol 1e-5) and force (rel tol 1e-5).
 
+#### CustomIntegrator
+* **testSingleBond.** Test a leapfrog Verlet integrator with a two-particle system joined by a harmonic bond by comparing the trajectory over 1000 steps of 10 fs timestep dynamics with the analytical solution, testing positions (rel tol 1e-4), velocities (rel tol 1e-4), and potential (rel tol 1e-4).
+* **testConstraints.** For an 8-particle chain, test a leapfrog Verlet integrator with SHAKE constraints (tol 1e-5) starting from deterministic positions and random velocities over 1000 timesteps of 2 fs to ensure bond lengths remain constrained (rel tol 2e-5). Check that energy is approximately equal to initial energy (rel tol 0.01).
+* **testVelocityConstraints.** For a 10-particle system, with three particles constrained by SHAKE (tol 1e-5), three particles constrained by SETTLE, and the rest by CCMA (tol 1e-5), integrate using a velocity Verlet integrator with SHAKE/RATTLE starting from a fixed initial geometry and random initial velocities for 1000 steps of 2 fs, checking that we preserve distances (rel tol 2e-5), velocities along constraints are zero (rel tol 2e-5), and that the total energy is approximately preserved (rel tol 0.01).
+* **testConstrainedMasslessParticles.** For a system with two particles connected by a constraint, in which one particle has its mass set to zero (fixing it in space), ensure an Exception is thrown. When both particles have masses set to zero (fixing them in space), no exception is thrown. Integration should keep both velocities set to zero.
+* **testWithThermostat.** Test an 8-particle alternately charged LJ system with a leapfrog Verlet integrator and Andersen thermostat to make sure the average instantaneous kinetic energy over 150 ps is correct for the thermostat temperature (rel tol 0.1).
+* **testMonteCarlo.** Test a simple Metropolis Monte Carlo scheme using Gaussian proposal with a system of two harmonically bonded particles to ensure the binned distribution of distances (bin size 0.4, 100 bins) is approximately satisfied (rel tol 0.01).
+* **testSum.** Test that specifying a kinetic energy expression for a leapfrog Verlet integrator gives the expected kinetic energy for a 200-particle system (rel tol 1e-5).
+* **testParameter.**
+* **testRandomDistributions.**
+* **testPerDofVariables.**
+* **testForceGroups.**
+* **testRespa.**
+* **testMergedRandoms.**
 
 ### Integration tests
 
