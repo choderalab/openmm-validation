@@ -222,6 +222,8 @@ Statistical mechanics tests ensure that the statistical mechanical properties of
 We have implemented a battery of test systems that span a variety of complexities:
 https://github.com/choderalab/repex/blob/master/repex/testsystems.py
 
+These systems have a number of different analytically computable properties defined for each system that can be identified by introspection, such that a testing harness can automate the computation and comparison of various analytical properties.
+
 This includes:
 * `HarmonicOscillator`: A 3D harmonic oscillator.
 * `PowerOscillator`: A single particle confined to an x^d well.
