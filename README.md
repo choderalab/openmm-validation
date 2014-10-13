@@ -32,6 +32,7 @@ Some tests compute the expectation of a quantity from a simulation of finite len
   * For energies, `kT` is a meaningful scale. For example, we may want errors less than `0.01*kT`, to ensure equilibrium probabilities are not corrupted substantially.
   * What would the criteria be for forces?
 * How should finite-difference tests of energies and forces be conducted?
+* How should defaults for various accuracy-controlling parameters (such as Ewald tolerance, constraint tolerance, etc.) be selected?
 
 ## Detailed test description
 
@@ -174,10 +175,10 @@ Stability tests ensure that simulations of typical systems of interest are stabl
 
 ##### Old validation suite tests
 Tests are run by running the `runAllTests.sh` script, which runs the systems in `systems/` through four different kinds of tests in different subsets:
-* **Consistency between platforms**: `TestForces.py`
-* **Energy-force consistency**: `TestEnergyForces.py`
-* **Energy conservation**: `TestVerletEnergyConservation.py`
-* **Thermostability** (really just a thermostat test): `TestLangevinThermostability.py`
+* **Consistency between platforms** (`TestForces.py`): Check that the highest 90th percentile particle relative force error norm between platforms is smaller than 1e-3 (single precision) or 1e-4 (mixed, double precision).
+* **Energy-force consistency** (`TestEnergyForces.py`): A five-point central finite difference calculation is used (`step = eps/|force|`) to estimate the gradient of the potential along the direction of the force, and is checked against the computed force (rel tol 1e-3 for single precision; 1e-4 for double precision). This test uses `eps = 0.002`. Ewald tolerance is set to `tol/2` for these tests, where `tol` is the rel tol. Some force types are tested independently or in different periodic/nonperiodic modes.
+* **Energy conservation** (`TestVerletEnergyConservation.py`): The Verlet integrator is run with 1 fs timestep to test each precision mode, and the total energy drift in kT/dof/ns computed by linear regression over 30 ps. Acceptable drift is defined as 1e-4 (single) or 1e-5 (mixed, double).  **NOTE: Violations of this drift never actually triggered errors in the regression suite.**
+* **Thermostability** (`TestLangevinThermostability.py`): A Langevin integrator is run (1 fs timestep, 1/ps collision rate) for 30 ps to check that the average kinetic energy is within rel tol 0.03.  Bond constraints are also monitored (rel tol 1e-4 for single, 1e-5 for mixed/double).
 
 ##### Test systems from old OpenMM validation suite
 * 1PLX
