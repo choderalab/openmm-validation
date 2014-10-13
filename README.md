@@ -107,6 +107,32 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testRespa.** Test that a RESPA integrator for an 8-particle system containing a harmonically bonded chain of LJ particles of alternating charge where the reciprocal `NonbondedForce` interactions and harmonic bond interactions are updated in the inner loop produces decent energy conservation (rel tol 0.05) over 2000 steps of 2 fs outer / 1 fs inner timestep. 
 * **testMergedRandoms.** Generate two uniform and two gaussian random variates each for per-dof and global variables, as test if uniform variates are in the interval [0,1) and gaussian variates are in the interval [-10,10) for 10 sets of integrator steps for 10 particles. **NOTE: This does not test if the distributions are correct.**
 
+#### CustomManyParticleForces
+
+#### CustomNonbondedForce
+
+#### CustomTorsionForce
+
+#### Ewald
+
+#### GBSAOBCForce
+
+#### HarmonicAngleForce
+
+#### HarmonicBondForce
+
+#### LangevinIntegrator
+
+#### LocalEnergyMinimizer
+
+#### MonteCarloAnisotropicBarostat
+
+#### MonteCarloBarostat
+* **testChangingBoxSize.** Test that the periodic box vectors can be get/set correctly, and that shrinking the box size to be smaller than twice the cutoff distance triggers an exception.
+* **testIdealGas.** For three temperatures (300K, 600K, 1000K), run a 100 ps simulation (10 fs timestep, 10 fs barostat update frequency) of a 64-particle noninteracting ideal gas, checking the average volume is within 3 standard errors. The box is also set to be rectangular, and the ratios of box vectors are checked to ensure this ratio is preserved by the isotropic barostat scaling.
+* **testRandomSeed.** Two simulations are run with the same random barostat random seed, and two with different random seeds, and particle positions are checked to ensure they are the same or different, as expected.
+* **testWater.** A grid of 512 SPC water molecules (8x8x8 grid, 3.2A spacing) is created, a barostat at 3 atm is added, the box is equilibrated for 4 ps and then simulated for 8 ps in reaction field electrostatics, checking the average density to see if it is close to 1.0 g/cm3 (rel tol 0.02). A Langevin integrator with 2 fs timestep and 1/ps collision rate is used along with a Monte Carlo barostat with 10 step update frequency. **JDC: Is this really the expected density for SPC water? Isn't a much longer simulation needed?**
+
 ### Integration tests
 
 #### Statistical mechanics tests
