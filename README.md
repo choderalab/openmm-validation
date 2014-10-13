@@ -180,8 +180,36 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 
 ### Integration tests
 
+#### Stability tests
+Stability tests ensure that simulations of typical systems of interest are stable and robust.
+
+##### Old validation suite tests
+Tests are run by running the `runAllTests.sh` script, which runs the systems in `systems/` through four different kinds of tests in different subsets:
+* **Consistency between platforms** (`TestForces.py`): Check that the highest 90th percentile particle relative force error norm between platforms is smaller than 1e-3 (single precision) or 1e-4 (mixed, double precision).
+* **Energy-force consistency** (`TestEnergyForces.py`): A five-point central finite difference calculation is used (`step = eps/|force|`) to estimate the gradient of the potential along the direction of the force, and is checked against the computed force (rel tol 1e-3 for single precision; 1e-4 for double precision). This test uses `eps = 0.002`. Ewald tolerance is set to `tol/2` for these tests, where `tol` is the rel tol. Some force types are tested independently or in different periodic/nonperiodic modes.
+* **Energy conservation** (`TestVerletEnergyConservation.py`): The Verlet integrator is run with 1 fs timestep to test each precision mode, and the total energy drift in kT/dof/ns computed by linear regression over 30 ps. Acceptable drift is defined as 1e-4 (single) or 1e-5 (mixed, double).  **NOTE: Violations of this drift never actually triggered errors in the regression suite.**
+* **Thermostability** (`TestLangevinThermostability.py`): A Langevin integrator is run (1 fs timestep, 1/ps collision rate) for 30 ps to check that the average kinetic energy is within rel tol 0.03.  Bond constraints are also monitored (rel tol 1e-4 for single, 1e-5 for mixed/double).
+
+##### Test systems from old OpenMM validation suite
+* 1PLX
+* bpti
+* ala10
+* dnaDickerson
+* ubiquitin
+* spectrin
+* sv582
+* sv583
+* 6TNA
+* CheY
+* lambda repressor, d14a
+* 1yrf
+* 1ubq
+* 1not
+
 #### Statistical mechanics tests
 Statistical mechanics tests ensure that the statistical mechanical properties of simple systems are reproduced as expeted.
+
+**THESE HAVE NOT BEEN IMPLEMENTED YET, BUT ARE SUGGESTIONS**
 
 * CheckEnsemble from Michael Shirts: [code](https://github.com/shirtsgroup/checkensemble) [DOI](http://pubs.acs.org/doi/abs/10.1021/ct300688p)
 
@@ -214,31 +242,6 @@ This includes:
 * `AMOEBAIonBox`: A single Ca2 ion in a water box.
 * Lots of alchemically-modified systems
 
-#### Stability tests
-Stability tests ensure that simulations of typical systems of interest are stable and robust.
-
-##### Old validation suite tests
-Tests are run by running the `runAllTests.sh` script, which runs the systems in `systems/` through four different kinds of tests in different subsets:
-* **Consistency between platforms** (`TestForces.py`): Check that the highest 90th percentile particle relative force error norm between platforms is smaller than 1e-3 (single precision) or 1e-4 (mixed, double precision).
-* **Energy-force consistency** (`TestEnergyForces.py`): A five-point central finite difference calculation is used (`step = eps/|force|`) to estimate the gradient of the potential along the direction of the force, and is checked against the computed force (rel tol 1e-3 for single precision; 1e-4 for double precision). This test uses `eps = 0.002`. Ewald tolerance is set to `tol/2` for these tests, where `tol` is the rel tol. Some force types are tested independently or in different periodic/nonperiodic modes.
-* **Energy conservation** (`TestVerletEnergyConservation.py`): The Verlet integrator is run with 1 fs timestep to test each precision mode, and the total energy drift in kT/dof/ns computed by linear regression over 30 ps. Acceptable drift is defined as 1e-4 (single) or 1e-5 (mixed, double).  **NOTE: Violations of this drift never actually triggered errors in the regression suite.**
-* **Thermostability** (`TestLangevinThermostability.py`): A Langevin integrator is run (1 fs timestep, 1/ps collision rate) for 30 ps to check that the average kinetic energy is within rel tol 0.03.  Bond constraints are also monitored (rel tol 1e-4 for single, 1e-5 for mixed/double).
-
-##### Test systems from old OpenMM validation suite
-* 1PLX
-* bpti
-* ala10
-* dnaDickerson
-* ubiquitin
-* spectrin
-* sv582
-* sv583
-* 6TNA
-* CheY
-* lambda repressor, d14a
-* 1yrf
-* 1ubq
-* 1not
 
 
 
