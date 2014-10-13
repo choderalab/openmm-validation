@@ -49,9 +49,9 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testRandomSeed.** Ensure that setting the random seed to the same value produces identical particle positions following integration from the same initial positions and momenta, while changing the random seed produces a different set of particle positions.
 
 #### Brownian integrator
-* **testSingleBond.** Compare the time-dependent positions and velocities of a single harmonic bond to the analytical solution for a damped harmonic oscillator.
-* **testTemperature.** Ensure average of potential energy for a chain of 8 harmonically bonded particles matches matches analytically expected result. **NOTE: This test differs from the Andersen thermostat test of the same name.**
-* **testConstraints.** Simulate a chain of 8 charged LJ particles and ensure that constraints remain satisfied. **NOTE: This test differs from the Andersen thermostat test of the same name.**
+* **testSingleBond.** Compare the time-dependent positions (rel tol 0.02) and velocities (rel tol 0.11) of a single harmonic bond to the analytical solution for a damped harmonic oscillator.
+* **testTemperature.** Ensure average of potential energy for a chain of 8 harmonically bonded particles matches matches analytically expected result (rel tol 0.1). **NOTE: This test differs from the Andersen thermostat test of the same name.**
+* **testConstraints.** Simulate a chain of 8 charged LJ particles and ensure that constraints remain satisfied (rel tol 1e-4). **NOTE: This test differs from the Andersen thermostat test of the same name.**
 * **testConstrainedMasslessParticles.** Ensure that attempting to constrain a massless (fixed) particle throws an exception, while making both particles massless (fixed) does not throw an exception despite the presence of a constraint.
 * **testRandomSeed.** Ensure that setting the random seed to the same value produces identical particle positions following integration from the same initial positions and momenta, while changing the random seed produces a different set of particle positions.
 
@@ -126,6 +126,11 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testBonds.** Test a configuration of three particles with two harmonic bonds, ensuring that forces and energies agree (rel tol 1e-5), using two different sets of bond parameters.
 
 #### LangevinIntegrator
+* **testSingleBond.** Compare the time-dependent positions and velocities (rel tol 0.02) of a single harmonic bond to the analytical solution for a damped harmonic oscillator. Then set the friction to a small value (5e-5/ps) and check that energy is approximately conserved (rel tol 0.01) over 1000 steps.
+* **testTemperature.** Ensure average of potential energy for a chain of 8 harmonically bonded particles matches matches analytically expected result. **NOTE: This test differs from the Andersen thermostat test of the same name.**
+* **testConstraints.** Simulate a chain of 8 charged LJ particles and ensure that constraints remain satisfied (rel tol 1e-4). **NOTE: This test differs from the Andersen thermostat test of the same name.**
+* **testConstrainedMasslessParticles.** Ensure that attempting to constrain a massless (fixed) particle throws an exception, while making both particles massless (fixed) does not throw an exception despite the presence of a constraint.
+* **testRandomSeed.** Ensure that setting the random seed to the same value produces identical particle positions following integration from the same initial positions and momenta, while changing the random seed produces a different set of particle positions.
 
 #### LocalEnergyMinimizer
 * **testHarmonicBonds.** For a chain of 10 particles connected by harmonic bonds, ensure that the minimized configuration recovers the expected equilibrium bond distances (rel tol 1e-4).
