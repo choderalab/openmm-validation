@@ -32,7 +32,8 @@ Some tests compute the expectation of a quantity from a simulation of finite len
   * For energies, `kT` is a meaningful scale. For example, we may want errors less than `0.01*kT`, to ensure equilibrium probabilities are not corrupted substantially.
   * What would the criteria be for forces?
 * How should finite-difference tests of energies and forces be conducted?
-* How should defaults for various accuracy-controlling parameters (such as Ewald tolerance, constraint tolerance, etc.) be selected?
+* How should defaults for various accuracy-controlling parameters (such as Ewald tolerance, constraint tolerance, etc.) be selected?  Does it make sense that the tests should be conducted with tolerances much tighter than defaults?
+* Should nonperiodic cutoff systems use reaction-field electrostatics?
 
 ## Detailed test description
 
@@ -143,12 +144,12 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testForces.** For a 100 particle chain containing harmonic bonds, angles, torsions, and RB torsions, check a single random configuration and compare energies and forces with Reference platform (rel tol 1e-4).
 
 #### NonbondedForce
-* **testCoulomb.** 
-* **testLJ.**
-* **testExclusionsAnd14.**
-* **testCutoff.**
+* **testCoulomb.** Test the energy and force between two charged particles agrees with analytical result to within rel tol 1e-5 for a single geometry
+* **testLJ.** Test the energy and force between two uncharged LJ particles agrees with analytical result to within rel tol of 1e-5 for a single geometry.
+* **testExclusionsAnd14.** For a 5-particle bonded chain, check that exclusions and exceptions are properly generated. For a single geometry, check that LJ and Coulomb energies and forces match anaytical result to rel tol 1e-5.
+* **testCutoff.** For a nonperiodic reaction field system with three charged particles, check that energy and forces match analytically expected result for a single fixed geometry to rel tol 1e-5.
 * **testCutoff14.**
-* **testPeriodic.**
+* **testPeriodic.** For a periodic reaction field system with three charged particles, check that energy and forces match analytically expected result for a single fixed geometry to rel tol 1e-5.
 * **testLargeSystem.** For a 600 diatomic LJ particles containing harmonic bonds (and intramolecular nonbonded exclusions), check that forces agree with Reference platform to within rel tol 2e-3 for nonperiodic cutoff (cutoff=20A) and periodic reaction field electrostatics.
 * **testDispersionCorrection.** For a 125 LJ (sigma=11A, eps=0.5 kJ/mol) particle system, compare the analytical dispersion correction for a cutoff for an 11.7A cutoff with the analytical value (rel tol 1e-4).  Change half the particles to sigma=10A, eps=1 kJ/mol, and see if analytical value is still recovered (rel tol 1e-4).
 * **testChangingParmaeters.** For 600 constrained diatomic charged LJ particles, generate a random configuration of molecules, and check if energy and forces agree with Reference platform (rel tol 2e-3). Modify charge and LJ parameters and see if agreement is still achieved.
@@ -156,10 +157,26 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 
 #### PeriodicTorsionForce
 
+#### RBTorsionForce
+
 #### Random (numbers)
 * **testGaussian.** Generate 5000 random gaussian variates and compute first four moments, checking that these are within 3 standard errors.
 * **testRandomVelocities.** Generate a constraint-connected chain of 10000 particles and generate Maxwell-Boltzmann velocities for 100K, checking that velocity components along constrained bond vectors are zero (abs tol 2e-5 nm/ps). Check that average kinetic energy is within 4 standard errors.
 
+#### Settle
+* **testConstraints.** For a system of 10 three-site SPC waters with no cutoff, simulate for 1000 steps of 1 fs timestep Langevin dynamics (collision rate 2/ps) and check that bond constraint distances are satisfied to rel tol 1e-5.
+
+#### Sort
+
+#### VariableVerletIntegrator
+
+#### VerletIntegrator
+* **testSingleBond.** Compare the time-dependent positions and velocities of a single harmonic bond to the analytical solution for a harmonic oscillator.
+* **testConstraints.** For a constrained chain of 8 alternately charged LJ particles, generate random velocities, and ensure constraint distances are preserved (rel tol 1e-4) and total energy is conserved (rel tol 0.01) over 1000 steps of 1 fs dynamics. Constraint tolerance is set to 1e-5 before this test.
+* **testConstrainedClusters.** For a constrained cluster of 7 atoms, generate random velocities, and ensure constraint distances are preserved (rel tol 2e-5) and total energy is conserved (rel tol 0.01) over 1000 steps of 1 fs dynamics. Constraint tolerance is set to 1e-5 before this test.
+* **testConstrainedMasslessParticles.** Ensure that attempting to constrain a massless (fixed) particle throws an exception, while making both particles massless (fixed) does not throw an exception despite the presence of a constraint.
+
+#### VirtualSites
 
 ### Integration tests
 
