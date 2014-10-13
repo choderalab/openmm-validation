@@ -119,12 +119,17 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 #### GBSAOBCForce
 
 #### HarmonicAngleForce
+* **testAngles.** Test a configuration of four particles with two harmonic angles, ensuring that forces and energies agree (rel tol 1e-5), using two different sets of angle parameters.
 
 #### HarmonicBondForce
+* **testBonds.** Test a configuration of three particles with two harmonic bonds, ensuring that forces and energies agree (rel tol 1e-5), using two different sets of bond parameters.
 
 #### LangevinIntegrator
 
 #### LocalEnergyMinimizer
+* **testHarmonicBonds.** For a chain of 10 particles connected by harmonic bonds, ensure that the minimized configuration recovers the expected equilibrium bond distances (rel tol 1e-4).
+* **testLargeSystem.** For a system of 50 constrained diatomic molecules initialized from random configurations, ensure that the resulting force norm is less than 3*5 kJ/mol/nm.
+* **testVirtualSites.** For a system of 50 constrained diatomic molecules containing a bond-midpoint virtual coulomb/LJ site, initialized from random configurations, ensure that the resulting force norm is less than 3*5 kJ/mol/nm.
 
 #### MonteCarloAnisotropicBarostat
 
@@ -133,6 +138,28 @@ The following is a partial list of unit tests currently implemented in OpenMM. N
 * **testIdealGas.** For three temperatures (300K, 600K, 1000K), run a 100 ps simulation (10 fs timestep, 10 fs barostat update frequency) of a 64-particle noninteracting ideal gas, checking the average volume is within 3 standard errors. The box is also set to be rectangular, and the ratios of box vectors are checked to ensure this ratio is preserved by the isotropic barostat scaling.
 * **testRandomSeed.** Two simulations are run with the same random barostat random seed, and two with different random seeds, and particle positions are checked to ensure they are the same or different, as expected.
 * **testWater.** A grid of 512 SPC water molecules (8x8x8 grid, 3.2A spacing) is created, a barostat at 3 atm is added, the box is equilibrated for 4 ps and then simulated for 8 ps in reaction field electrostatics, checking the average density to see if it is close to 1.0 g/cm3 (rel tol 0.02). A Langevin integrator with 2 fs timestep and 1/ps collision rate is used along with a Monte Carlo barostat with 10 step update frequency. **JDC: Is this really the expected density for SPC water? Isn't a much longer simulation needed?**
+
+#### MultipleForces
+* **testForces.** For a 100 particle chain containing harmonic bonds, angles, torsions, and RB torsions, check a single random configuration and compare energies and forces with Reference platform (rel tol 1e-4).
+
+#### NonbondedForce
+* **testCoulomb.** 
+* **testLJ.**
+* **testExclusionsAnd14.**
+* **testCutoff.**
+* **testCutoff14.**
+* **testPeriodic.**
+* **testLargeSystem.** For a 600 diatomic LJ particles containing harmonic bonds (and intramolecular nonbonded exclusions), check that forces agree with Reference platform to within rel tol 2e-3 for nonperiodic cutoff (cutoff=20A) and periodic reaction field electrostatics.
+* **testDispersionCorrection.** For a 125 LJ (sigma=11A, eps=0.5 kJ/mol) particle system, compare the analytical dispersion correction for a cutoff for an 11.7A cutoff with the analytical value (rel tol 1e-4).  Change half the particles to sigma=10A, eps=1 kJ/mol, and see if analytical value is still recovered (rel tol 1e-4).
+* **testChangingParmaeters.** For 600 constrained diatomic charged LJ particles, generate a random configuration of molecules, and check if energy and forces agree with Reference platform (rel tol 2e-3). Modify charge and LJ parameters and see if agreement is still achieved.
+* **testSwitchingFunction.** For a pair of particles interacting via distinct Lennard-Jones parameters (effective sigma ~ 13A), compute potential energy over the range of 10A to 25A (1A step) where the switch turns on at 15A and cutoff at 20A, comparing with analytical solution (rel tol 1e-5). Check if force agrees with central finite difference of potential (delta = 0.01A) to within rel tol 1e-3.
+
+#### PeriodicTorsionForce
+
+#### Random (numbers)
+* **testGaussian.** Generate 5000 random gaussian variates and compute first four moments, checking that these are within 3 standard errors.
+* **testRandomVelocities.** Generate a constraint-connected chain of 10000 particles and generate Maxwell-Boltzmann velocities for 100K, checking that velocity components along constrained bond vectors are zero (abs tol 2e-5 nm/ps). Check that average kinetic energy is within 4 standard errors.
+
 
 ### Integration tests
 
